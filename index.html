@@ -1,22 +1,9 @@
 <html>
 <body>
     <p>welcome to the class chatbot</p>
-<script type='text/javascript' src="https://www.botlibre.com/scripts/sdk.js"></script>
-<script type='text/javascript'>
-SDK.applicationId = "1591399486198011154";
-var sdk = new SDKConnection();
-var web = new WebAvatar();
-web.version = 8.5;
-web.connection = sdk;
-web.avatar = "12601502";
-web.voice = "cmu-slt-hsmm";
-web.voiceMod = "default";
-web.width = "300";
-web.createBox();
-web.addMessage("hello, my name is Tuesday and I am the class chatbot.", "", "", "");
-web.processMessages();
-  </script>
-  <script>!(function () {
+  <script type='text/javascript' src="https://www.botlibre.com/scripts/sdk.js"></script>
+  <script type='text/javascript'>
+    !(function () {
     let e = document.createElement("script"),
       t = document.head || document.getElementsByTagName("head")[0];
     (e.src =
@@ -28,6 +15,7 @@ web.processMessages();
             customData: { language: "en" },
             socketUrl: "http://localhost:5005",
             onSocketEvent: onSocketEvent,
+            
             // add other props here
           },
           null
@@ -35,6 +23,31 @@ web.processMessages();
       }),
       t.insertBefore(e, t.firstChild);
   })();
+
+ 
+  SDK.applicationId = "1591399486198011154";
+  var sdk = new SDKConnection();
+  var web = new WebAvatar();
+  web.version = 8.5;
+  web.connection = sdk;
+  web.avatar = "37788053";
+  web.voice = "cmu-slt";
+  web.voiceMod = "default";
+  web.nativeVoice = true;
+  web.nativeVoiceName = "Google US English";
+  web.lang = "en-US";
+  web.width = "300";
+  web.height = "300";
+  web.createBox();
+  web.addMessage("Hello, I am Tuesday. The class chatbot", "", "", "");
+  web.processMessages();
+  onSocketEvent={
+    'bot_uttered': async(e) => {await web.addMessage(e.text,"","","");
+      await web.processMessages();
+    },
+    'connect': () => console.log('connection established'),
+    'disconnect': () => doSomeCleanup(),
+  };
   </script>
 </body>
 </html>
