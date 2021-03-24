@@ -15,7 +15,11 @@
             customData: { language: "en" },
             socketUrl: "http://localhost:5005",
             onSocketEvent: onSocketEvent,
-            
+            customMessageDelay: (message) => {
+              let delay = message.length * 1.5*1000;
+              if (delay < 400) delay = 1000;
+              return delay;
+          },
             // add other props here
           },
           null
