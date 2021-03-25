@@ -1,6 +1,8 @@
 <html>
 <body>
-    <p>welcome to the class chatbot</p>
+    <p>welcome to the class chatbot  
+    <b> Turn Tuesday Speech off</b>
+    <input type="checkbox" id="NoSpeech" class="checkbox" />
   <script type='text/javascript' src="https://www.botlibre.com/scripts/sdk.js"></script>
   <script type='text/javascript'>
     !(function () {
@@ -16,13 +18,17 @@
             socketUrl: "http://localhost:5005",
             onSocketEvent: onSocketEvent,
             customMessageDelay: (message) => {
+              if (document.getElementById("NoSpeech").checked==false){
               let words=message.split(" ");
               console.log(words.length)
               let delay = (words.length / 3)*1000;
               console.log(delay)
               if (delay < 400) delay = 1000;
               return delay;
-          },
+          } else {
+            let delay=500;
+            return delay;
+          }},
             // add other props here
           },
           null
@@ -43,20 +49,24 @@
   web.nativeVoice = true;
   web.nativeVoiceName = "Google US English";
   web.lang = "en-US";
-  web.width = "300";
-  web.height = "300";
+  web.width = "2280";
+  web.height = "1080";
   web.createBox();
   web.addMessage("Hello, I am Tuesday. The class chatbot", "", "", "");
   web.processMessages();
   function sendmessage(e){
     console.log(e.text.slice(0,20));
     web.addMessage(e.text,"","","");
+    web.processMessages();
+    return
   }
   onSocketEvent={
-    'bot_uttered':(e) => { new Promise((resolve,reject)=> {
+    'bot_uttered':(e) => 
+    { if (document.getElementById("NoSpeech").checked==false){ 
+      new Promise((resolve,reject)=> {
       resolve(sendmessage(e));
-    }).then(web.processMessages()).catch(err => console.log(err));
-    },
+    }).catch(err => console.log(err));
+    }},
     'connect': () => console.log('connection established'),
     'disconnect': () => doSomeCleanup(),
   };
