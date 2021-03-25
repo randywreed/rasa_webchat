@@ -8,7 +8,7 @@
       t = document.head || document.getElementsByTagName("head")[0];
     (e.src =
       "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"),
-      (e.async = !0),
+      (e.async = !1),
       (e.onload = () => {
         window.WebChat.default(
           {
@@ -16,7 +16,10 @@
             socketUrl: "http://localhost:5005",
             onSocketEvent: onSocketEvent,
             customMessageDelay: (message) => {
-              let delay = message.length * 1.5*1000;
+              let words=message.split(" ");
+              console.log(words.length)
+              let delay = (words.length / 3)*1000;
+              console.log(delay)
               if (delay < 400) delay = 1000;
               return delay;
           },
@@ -45,9 +48,14 @@
   web.createBox();
   web.addMessage("Hello, I am Tuesday. The class chatbot", "", "", "");
   web.processMessages();
+  function sendmessage(e){
+    console.log(e.text.slice(0,20));
+    web.addMessage(e.text,"","","");
+  }
   onSocketEvent={
-    'bot_uttered': async(e) => {await web.addMessage(e.text,"","","");
-      await web.processMessages();
+    'bot_uttered':(e) => { new Promise((resolve,reject)=> {
+      resolve(sendmessage(e));
+    }).then(web.processMessages()).catch(err => console.log(err));
     },
     'connect': () => console.log('connection established'),
     'disconnect': () => doSomeCleanup(),
